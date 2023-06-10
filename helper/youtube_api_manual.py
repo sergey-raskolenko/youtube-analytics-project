@@ -8,7 +8,7 @@ import isodate
 
 
 # YT_API_KEY скопирован из гугла и вставлен в переменные окружения
-api_key: str = os.getenv('YT_API_KEY')
+api_key: str = os.getenv('YOUTUBE_API_KEY')
 
 # создать специальный объект для работы с API
 youtube = build('youtube', 'v3', developerKey=api_key)
@@ -40,9 +40,9 @@ playlists = youtube.playlists().list(channelId=channel_id,
                                      maxResults=50,
                                      ).execute()
 # printj(playlists)
-for playlist in playlists['items']:
-    print(playlist)
-    print()
+# for playlist in playlists['items']:
+#     print(playlist)
+#     print()
 
 
 '''
@@ -69,16 +69,16 @@ video_ids: list[str] = [video['contentDetails']['videoId'] for video in playlist
 вывести длительности видеороликов из плейлиста
 docs: https://developers.google.com/youtube/v3/docs/videos/list
 '''
-video_response = youtube.videos().list(part='contentDetails,statistics',
+video_response = youtube.videos().list(part='snippet,statistics,contentDetails,topicDetails',
                                        id=','.join(video_ids)
                                        ).execute()
 # printj(video_response)
 
-for video in video_response['items']:
-    # YouTube video duration is in ISO 8601 format
-    iso_8601_duration = video['contentDetails']['duration']
-    duration = isodate.parse_duration(iso_8601_duration)
-    print(duration)
+# for video in video_response['items']:
+#     # YouTube video duration is in ISO 8601 format
+#     iso_8601_duration = video['contentDetails']['duration']
+#     duration = isodate.parse_duration(iso_8601_duration)
+#     print(duration)
 
 
 '''
@@ -95,3 +95,8 @@ video_title: str = video_response['items'][0]['snippet']['title']
 view_count: int = video_response['items'][0]['statistics']['viewCount']
 like_count: int = video_response['items'][0]['statistics']['likeCount']
 comment_count: int = video_response['items'][0]['statistics']['commentCount']
+# print(video_title)
+# print(view_count)
+# print(like_count)
+# print(comment_count)
+
