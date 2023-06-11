@@ -8,6 +8,13 @@ def channel():
 def test__init__(channel):
     assert isinstance(channel, Channel)
     assert channel.channel_id == 'UC-OVMPlMA3-YCIeg4z5z23A'
+    assert channel.title == 'MoscowPython'
+    assert channel.description == 'Видеозаписи со встреч питонистов и джангистов в Москве и не только. :)\n\
+Присоединяйтесь: https://www.facebook.com/groups/MoscowDjango! :)'
+    assert channel.url == 'https://www.youtube.com/channel/UC-OVMPlMA3-YCIeg4z5z23A'
+    assert int(channel.subscriber_count) >= 26100
+    assert int(channel.video_count) >= 687
+    assert int(channel.view_count) >= 2323778
 
 def test_print_info(channel):
-    assert channel.print_info()== None
+    assert channel.print_info() is None
