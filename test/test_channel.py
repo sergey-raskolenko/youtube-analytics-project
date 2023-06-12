@@ -19,13 +19,17 @@ def test__init__(channel):
     assert int(channel.video_count) >= 687
     assert int(channel.view_count) >= 2323778
 
+def test_set_channel_id(channel):
+    with pytest.raises(AttributeError):
+        channel.channel_id = 'Новое название'
+
 def test_print_info(channel):
     assert channel.print_info() is None
 
 def test_to_json(channel):
     filename = 'moscowpython.json'
     channel.to_json(filename)
-    path = os.path.join(os.path.dirname(__file__), filename)
+    path = os.path.join(filename)
     with open(path, 'r', encoding='utf-8') as f:
         data = json.load(f)
     assert len(data) == 7
