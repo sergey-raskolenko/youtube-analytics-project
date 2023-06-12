@@ -21,7 +21,6 @@ class Channel:
         """Геттер параметра channel_id для объекта Channel"""
         return self.__channel_id
 
-
     def channel_info(self):
         """Возвращает список словарей с информацией о канале"""
         youtube = Channel.get_service()
@@ -35,10 +34,16 @@ class Channel:
     def to_json(self, filename):
         """Записывает параметры объекта класса в json файл """
         with open(filename, 'w', encoding='utf-8') as f:
-            data = [self.channel_id, self.title, self.description, self.url, self.subscriber_count,
-                    self.video_count, self.view_count]
+            data = {
+                'channel_id': self.channel_id,
+                'title': self.title,
+                'description': self.description,
+                'url': self.url,
+                'subscriber_count': self.subscriber_count,
+                'video_count': self.video_count,
+                'view_count': self.view_count
+            }
             json.dump(data, f)
-
 
     @classmethod
     def get_service(cls):
