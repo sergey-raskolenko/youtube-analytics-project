@@ -19,6 +19,9 @@ def test__init__(channel):
     assert int(channel.video_count) >= 687
     assert int(channel.view_count) >= 2323778
 
+def test__str__(channel):
+    assert channel.__str__() == f'{channel.title} ({channel.url})'
+
 def test_set_channel_id(channel):
     with pytest.raises(AttributeError):
         channel.channel_id = 'Новое название'
