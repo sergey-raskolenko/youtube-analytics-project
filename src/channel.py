@@ -9,12 +9,14 @@ class Channel:
     def __init__(self, channel_id: str) -> None:
         """Экземпляр инициализируется id канала. Дальше все данные будут подтягиваться по API."""
         self.__channel_id = channel_id
-        self.title = self.channel_info()["items"][0]["snippet"]["title"]
-        self.description = self.channel_info()["items"][0]["snippet"]["description"]
-        self.url = f'https://www.youtube.com/channel/{self.channel_id}'
-        self.subscriber_count = self.channel_info()["items"][0]["statistics"]["subscriberCount"]
-        self.video_count = self.channel_info()["items"][0]["statistics"]["videoCount"]
-        self.view_count = self.channel_info()["items"][0]["statistics"]["viewCount"]
+        self.__title = self.title
+        self.__description = self.description
+        self.__url = self.url
+        self.__subscriber_count = self.subscriber_count
+        self.__video_count = self.video_count
+        self.__view_count = self.view_count
+
+
 
     def __str__(self):
         return f'{self.title} ({self.url})'
@@ -41,6 +43,36 @@ class Channel:
     def channel_id(self):
         """Геттер параметра channel_id для объекта Channel"""
         return self.__channel_id
+
+     @property
+    def title(self) -> str:
+         """Возвращает название канала"""
+         return self.channel_info().get("items")[0].get("snippet").get("title")
+
+    @property
+    def description(self) -> str:
+        """Возвращает описание канала"""
+        return self.channel_info().get("items")[0].get("snippet").get("description")
+
+    @property
+    def url(self) -> str:
+        """Возвращает ссылку на канал"""
+        return f'https://www.youtube.com/channel/{self.channel_id}'
+
+    @property
+    def subscriber_count(self) -> int:
+        """Возвращает количество подписчиков"""
+        return int(self.channel_info().get("items")[0].get("statistics").get("subscriberCount"))
+
+    @property
+    def video_count(self) -> int:
+        """Возвращает количество видео"""
+        return int(self.channel_info().get("items")[0].get("statistics").get("videoCount"))
+
+    @property
+    def view_count(self) -> int:
+        """Возвращает количество просмотров"""
+        return int(self.channel_info().get("items")[0].get("statistics").get("viewCount"))
 
     def channel_info(self):
         """Возвращает список словарей с информацией о канале"""
