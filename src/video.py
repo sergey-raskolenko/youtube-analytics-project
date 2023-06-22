@@ -7,8 +7,8 @@ class Video:
         self.__video_id = id_video
         self.__video_title = self.video_info().get('items')[0].get('snippet').get('title')
         self.__video_url =f'https://www.youtube.com/watch?v={self.video_id}'
-        self.__video_view_count = self.video_info().get('items')[0].get('statistics').get('viewCount')
-        self.__video_like_count = self.video_info().get('items')[0].get('statistics').get('likeCount')
+        self.__video_view_count = int(self.video_info().get('items')[0].get('statistics').get('viewCount'))
+        self.__video_like_count = int(self.video_info().get('items')[0].get('statistics').get('likeCount'))
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}('{self.video_id}')"
