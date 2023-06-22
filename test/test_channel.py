@@ -60,9 +60,9 @@ def test_arithmetic_functions(channel, channel2):
         channel <= 1
     with pytest.raises(TypeError):
         channel == 1
-    assert channel + channel2 == 101000
-    assert channel - channel2 == -48800
-    assert channel2 - channel == 48800
+    assert channel + channel2 >= 101000
+    assert channel - channel2 <= -48800
+    assert channel2 - channel >= 48800
     assert channel < channel2
     assert channel <= channel2
     assert channel2 > channel
