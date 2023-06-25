@@ -3,6 +3,7 @@ import os
 from googleapiclient.discovery import build
 class Video:
     api_key: str = os.getenv('YOUTUBE_API_KEY')
+    youtube = build('youtube', 'v3', developerKey=api_key)
     def __init__(self, id_video):
         self.__video_id = id_video
         self.__video_title = self.video_info().get('items')[0].get('snippet').get('title')
@@ -34,19 +35,13 @@ class Video:
 
     def video_info(self):
         """Возвращает список словарей с информацией о видео"""
-        youtube = self.get_service()
-        video_object = youtube.videos().list(part='snippet,statistics,contentDetails,topicDetails', id=self.video_id
-                                             ).execute()
+        video_object = self.youtube.videos().list(part='snippet,statistics,contentDetails,topicDetails',
+                                                  id=self.video_id).execute()
         return video_object
 
     def print_info(self) -> None:
         """Выводит в консоль информацию о канале."""
         print(json.dumps(self.video_info(), indent=2, ensure_ascii=False))
-
-    @classmethod
-    def get_service(cls):
-        """Возвращает объект для работы с YouTube API"""
-        return build('youtube', 'v3', developerKey=cls.api_key)
 
 class PLVideo(Video):
 
@@ -60,15 +55,13 @@ class PLVideo(Video):
     def __str__(self) -> str:
         return f'{self.video_title}'
 
-    def playlist_info(self):
+    def playlist_video_info(self):
         """Возвращает список словарей с информацией о плэйлисте"""
-        youtube = self.get_service()
-        playlist_object = youtube.playlistItems().list(playlistId=self.playlist_id,
-                                               part='contentDetails, snippet', maxResults=50,
-                                               ).execute()
+        playlist_object = self.youtube.playlistItems().list(part="snippet",
+                                                       playlistId=self.playlist_id, videoId=self.video_id
+                                                       ).execute()
         return playlist_object
 
     @property
     def playlist_id(self):
         return self.__playlist_id
-
