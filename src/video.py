@@ -5,38 +5,51 @@ class Video:
     api_key: str = os.getenv('YOUTUBE_API_KEY')
     youtube = build('youtube', 'v3', developerKey=api_key)
     def __init__(self, id_video):
-        self.__video_id = id_video
-        self.__video_title = self.video_info().get('items')[0].get('snippet').get('title')
-        self.__video_url =f'https://www.youtube.com/watch?v={self.video_id}'
-        self.__video_view_count = int(self.video_info().get('items')[0].get('statistics').get('viewCount'))
-        self.__video_like_count = int(self.video_info().get('items')[0].get('statistics').get('likeCount'))
+        """
+        Инициализатор объекта класса Video с информацией о видео
+        """
+        self.__id = id_video
+        self.__title = None
+        self.__url = None
+        self.__view_count = None
+        self.__like_count = None
+        try:
+            video_info = self.video_info().get('items')[0]
+            self.__title = video_info.get('snippet').get('title')
+            self.__url = f'https://www.youtube.com/watch?v={self.id}'
+            self.__view_count = int(video_info.get('statistics').get('viewCount'))
+            self.__like_count = int(video_info.get('statistics').get('likeCount'))
+        except Exception:
+            print(f"Exception: Wrong ID of video")
+
+
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}('{self.video_id}')"
+        return f"{self.__class__.__name__}('{self.id}')"
 
     def __str__(self) -> str:
-        return f'{self.video_title}'
+        return f'{self.title}'
 
     @property
-    def video_id(self):
-        return self.__video_id
+    def id(self):
+        return self.__id
     @property
-    def video_title(self):
-        return self.__video_title
+    def title(self):
+        return self.__title
     @property
-    def video_url(self):
-        return self.__video_url
+    def url(self):
+        return self.__url
     @property
-    def video_view_count(self):
-        return self.__video_view_count
+    def view_count(self):
+        return self.__view_count
     @property
-    def video_like_count(self):
-        return self.__video_like_count
+    def like_count(self):
+        return self.__like_count
 
     def video_info(self):
         """Возвращает список словарей с информацией о видео"""
         video_object = self.youtube.videos().list(part='snippet,statistics,contentDetails,topicDetails',
-                                                  id=self.video_id).execute()
+                                                  id=self.id).execute()
         return video_object
 
     def print_info(self) -> None:
@@ -50,15 +63,15 @@ class PLVideo(Video):
         self.__playlist_id = playlist_id
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}('{self.video_id}', '{self.playlist_id}')"
+        return f"{self.__class__.__name__}('{self.id}', '{self.playlist_id}')"
 
     def __str__(self) -> str:
-        return f'{self.video_title}'
+        return f'{self.title}'
 
     def playlist_video_info(self):
         """Возвращает список словарей с информацией о плэйлисте"""
         playlist_object = self.youtube.playlistItems().list(part="snippet",
-                                                       playlistId=self.playlist_id, videoId=self.video_id
+                                                       playlistId=self.playlist_id, videoId=self.id
                                                        ).execute()
         return playlist_object
 
